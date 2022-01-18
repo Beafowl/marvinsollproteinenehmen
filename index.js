@@ -1,14 +1,16 @@
 // dependencies
 
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, MessageAttachment } = require('discord.js');
 const cron = require('node-cron');
+const fs = require('fs');
+const path = require('path');
 const { channelId, userId, guildId, token} = require('./data.json');
 const client = new Client({intents: [Intents.FLAGS.GUILDS]});
 
 let channel;
 let user;
 
-client.on('ready', () => {
+client.on('ready', async () => {
 
     console.log(`Logged in as ${client.user.tag}`);
 
@@ -18,12 +20,14 @@ client.on('ready', () => {
 
     // fetch user
 
-    user = client.guilds.cache.get(guildId).members.cache.get(userId);
+    user = await client.users.fetch(userId);
 
-    cron.schedule('* * * * * *', () => {
+    sendMessage();
+
+    /*cron.schedule('* * * * * *', () => {
         console.log(`Marvin benachrichtigen`);
         sendMessage();
-    });
+    });*/
 });
 
 const sendMessage = () => {
@@ -34,15 +38,23 @@ const sendMessage = () => {
     
     // prepare contents
     const message = messagesToPrint[r];
-    const image = imagesToPrint[r];
+    const imagePath = path.join(__dirname, 'images', imagesToPrint[r]);
 
-    channel.send(`${message} ${user.tag}`, { file: image});
+    channel.send(`${message} ${user.toString()}`, {
 
+        files: [{
+
+            attachment: imagePath,
+            name: imagesToPrint[r],
+            description: "Proteine"
+        }]
+
+    });
 }
 
 const messagesToPrint = [ 'Schon Proteine genommen?', 'Marvin Proteine nehmen nicht vergessen!!!'];
 
-const imagesToPrint = [ './images/image0.jpg', './images/image1.jpg'];
+const imagesToPrint = [ 'image0.jpg', 'image1.png'];
 
 // send marvin a message everyday at 9 pm
 
