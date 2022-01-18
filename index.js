@@ -1,11 +1,11 @@
 // dependencies
 
-const { Client, Intents, MessageAttachment } = require('discord.js');
+const Discord = require('discord.js');
 const cron = require('node-cron');
 const fs = require('fs');
 const path = require('path');
 const { channelId, userId, guildId, token} = require('./data.json');
-const client = new Client({intents: [Intents.FLAGS.GUILDS]});
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_PRESENCES, Discord.Intents.FLAGS.GUILDS] });
 
 let channel;
 let user;
@@ -22,40 +22,30 @@ client.on('ready', async () => {
 
     user = await client.users.fetch(userId);
 
-    sendMessage();
-
-    /*cron.schedule('* * * * * *', () => {
+    cron.schedule('* 12 * * * *', () => {
         console.log(`Marvin benachrichtigen`);
         sendMessage();
-    });*/
+    });
 });
 
-const sendMessage = () => {
+const sendMessage = async () => {
 
-    const numberOfPosts = 2;
+    const randomImage = Math.floor(Math.random() * (imagesToPrint.length));
+    const randomMessage = Math.floor(Math.random() * (messagesToPrint.length));
 
-    const r = Math.floor(Math.random() * (numberOfPosts))
-    
     // prepare contents
-    const message = messagesToPrint[r];
-    const imagePath = path.join(__dirname, 'images', imagesToPrint[r]);
-
-    channel.send(`${message} ${user.toString()}`, {
-
-        files: [{
-
-            attachment: imagePath,
-            name: imagesToPrint[r],
-            description: "Proteine"
-        }]
-
-    });
+    const message = `${messagesToPrint[randomMessage]} ${user.toString()}`;
+    const image = imagesToPrint[randomImage];
+    
+    // does not work this way, maybe check at some point
+    //await channel.send('hamegululu', { files: ['https://puu.sh/IDcax/cdd3906291.png']});
+    channel.send(message);
+    channel.send(image);
 }
 
 const messagesToPrint = [ 'Schon Proteine genommen?', 'Marvin Proteine nehmen nicht vergessen!!!'];
+const imagesToPrint = [ 'https://puu.sh/IDto7/f06b3def19.jpg', 'https://puu.sh/IDtoq/73cfb5fb4b.png', 'https://puu.sh/IDtoK/6b201964c2.png'];
 
-const imagesToPrint = [ 'image0.jpg', 'image1.png'];
-
-// send marvin a message everyday at 9 pm
+// send marvin a message everyday at 12 pm
 
 client.login(token);
