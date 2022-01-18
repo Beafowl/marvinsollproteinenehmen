@@ -1,0 +1,19 @@
+{
+  "name": "marvinsollproteinenehmen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com//Beafowl/marvinsollproteinenehmen"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "node-cron": "^3.0.0"
+  }
+}
