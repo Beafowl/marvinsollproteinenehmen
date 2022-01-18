@@ -22,7 +22,7 @@ client.on('ready', async () => {
 
     user = await client.users.fetch(userId);
 
-    cron.schedule('* 12 * * * *', () => {
+    cron.schedule('0 0 12 * * * *', () => {
         console.log(`Marvin benachrichtigen`);
         sendMessage();
     });
