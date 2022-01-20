@@ -7,12 +7,21 @@ const path = require('path');
 const { channelId, userId, guildId, token} = require('./data.json');
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_PRESENCES, Discord.Intents.FLAGS.GUILDS] });
 
+const zeroPad = (num) => String(num).padStart(2, '0')
+
+const printWithTimestamp = (message) => {
+
+    const currentTime = new Date();
+
+    console.log(`[${zeroPad(currentTime.getHours())}:${zeroPad(currentTime.getMinutes())}:${zeroPad(currentTime.getSeconds())}] ${message}`);
+}
+
 let channel;
 let user;
 
 client.on('ready', async () => {
 
-    console.log(`Logged in as ${client.user.tag}`);
+    printWithTimestamp(`Logged in as ${client.user.tag}`);
 
     // fetch channel
 
@@ -22,8 +31,9 @@ client.on('ready', async () => {
 
     user = await client.users.fetch(userId);
 
+    // execute at 12 am
     cron.schedule('0 0 12 * * * *', () => {
-        console.log(`Marvin benachrichtigen`);
+        printWithTimestamp(`Marvin benachrichtigen`);
         sendMessage();
     });
 });
