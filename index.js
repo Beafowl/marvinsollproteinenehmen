@@ -32,13 +32,15 @@ client.on('ready', async () => {
 
     // fetch role
     user = channel.guild.roles.cache.get(userId)
-    sendMessage();
+
+    // test
+    //sendMessage();
 
     // execute at 12 am
-    /*cron.schedule('0 0 12 * * * *', () => {
+    cron.schedule('0 0 12 * * * *', () => {
         printWithTimestamp(`Marvin benachrichtigen`);
         sendMessage();
-    });*/
+    });
 });
 
 const sendMessage = async () => {
