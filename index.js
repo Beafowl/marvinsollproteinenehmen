@@ -28,14 +28,17 @@ client.on('ready', async () => {
     channel = client.guilds.cache.get(guildId).channels.cache.get(channelId);
 
     // fetch user
+    //user = await client.users.fetch(userId);
 
-    user = await client.users.fetch(userId);
+    // fetch role
+    user = channel.guild.roles.cache.get(userId)
+    sendMessage();
 
     // execute at 12 am
-    cron.schedule('0 0 12 * * * *', () => {
+    /*cron.schedule('0 0 12 * * * *', () => {
         printWithTimestamp(`Marvin benachrichtigen`);
         sendMessage();
-    });
+    });*/
 });
 
 const sendMessage = async () => {
